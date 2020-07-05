@@ -125,7 +125,7 @@ class SocialAccount(models.Model):
 
 
 class SocialToken(models.Model):
-    app = models.ForeignKey(SocialApp, on_delete=models.CASCADE)
+    # app = models.ForeignKey(SocialApp, on_delete=models.CASCADE)
     account = models.ForeignKey(SocialAccount, on_delete=models.CASCADE)
     token = models.TextField(
         verbose_name=_('token'),
@@ -230,7 +230,7 @@ class SocialLogin(object):
         user.save()
         self.account.user = user
         self.account.save()
-        if app_settings.STORE_TOKENS and self.token and self.token.app:
+        if app_settings.STORE_TOKENS and self.token: # and self.token.app:
             self.token.account = self.account
             self.token.save()
         if connect:
@@ -260,11 +260,10 @@ class SocialLogin(object):
             self.user = self.account.user
             a.save()
             # Update token
-            if app_settings.STORE_TOKENS and self.token and self.token.app.pk:
+            if app_settings.STORE_TOKENS and self.token:# and self.token.app.pk:
                 assert not self.token.pk
                 try:
-                    t = SocialToken.objects.get(account=self.account,
-                                                app=self.token.app)
+                    t = SocialToken.objects.get(account=self.account)
                     t.token = self.token.token
                     if self.token.token_secret:
                         # only update the refresh token if we got one
