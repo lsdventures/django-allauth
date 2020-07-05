@@ -140,7 +140,7 @@ class SocialToken(models.Model):
                                       verbose_name=_('expires at'))
 
     class Meta:
-        unique_together = ('app', 'account')
+        # unique_together = ('app', 'account')
         verbose_name = _('social application token')
         verbose_name_plural = _('social application tokens')
 
